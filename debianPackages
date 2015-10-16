@@ -144,19 +144,13 @@ then
 fi
 
 # Instalar Java
-wget --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u11-b12/jdk-8u11-linux-x32.tar.gz
-mkdir /usr/java
-mv jdk-8u11-linux-x32.tar.gz /usr/java
-cd /usr/java
-tar zxvf jdk-8u11-linux-x64.tar.gz
-ln -s jdk1.8.0_11 latest
-ln -s latest default
-ln -s /usr/java/default/jre/lib/i386/libnpjp2.so /usr/lib/mozilla/plugins/libnpjp2.so
-mkdir /etc/.java
-mkdir /etc/.java/deployment
-echo "deployment.system.config.mandatory=TRUE" >> /etc/.java/deployment/deployment.config
-echo "deployment.system.config=file\:/etc/.java/deployment/deployment.properties" >> /etc/.java/deployment/deployment.config
-echo "deployment.security.level=MEDIUM" >> /etc/.java/deployment/deployment.properties
+echo "deb http://ppa.launchpad.net/webupd8team/java/ubuntu trusty main" | tee /etc/apt/sources.list.d/webupd8team-java.list
+echo "deb-src http://ppa.launchpad.net/webupd8team/java/ubuntu trusty main" | tee -a /etc/apt/sources.list.d/webupd8team-java.list
+apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys EEA14886
+apt-get update
+apt-get install -y oracle-java8-installer
+echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | sudo /usr/bin/debconf-set-selections
+apt-get install -y oracle-java8-set-default
 cd
 
 java -version

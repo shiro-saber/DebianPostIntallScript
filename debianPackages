@@ -15,13 +15,15 @@ fi
 
 FILE="/tmp/out.$$"
 GREP="/bin/grep"
-#....
+
 # Make sure only root can run our script
-if [ "$(id -u)" != "0" ]; then
+if [ "$(id -u)" != "0" ]; 
+then
    echo "¡NECESITAS SER ROOT!"
    exit 1
 fi
 
+cd
 echo "listo para instalar"
 
 apt-get update
@@ -36,7 +38,6 @@ apt-get install -y xfce4-xkb-plugin
 apt-get install -y libcurl3
 wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
 dpkg -i google-chrome-stable_current_amd64.deb
-rm google-chrome-stable_current_amd64.deb
 
 ##Quitar los parquetes que no son seguros.
 apt-get remove -y ftp
@@ -103,17 +104,7 @@ do
     echo "export JAVA_HOME=/usr/java/default" >> /root/.bashrc
     echo "export ANDROID=/home/$LINE/Development/adt-bundle-linux-x86_64-20140702" >> /home/$LINE/.bashrc
     echo "export ANDROID=/home/$LINE/Development/adt-bundle-linux-x86_64-20140702" >> /root/.bashrc
-
-    if [ $1 -eq 1 ] # Si CUDA
-    then
-      echo "export PATH=\$JAVA_HOME/bin:/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:/usr/local/cuda/bin:\$ANDROID/eclipse:\$ANDROID/sdk/platform-tools" >> /home/$LINE/.bashrc
-      echo "export LD_LIBRARY_PATH=/lib:/usr/lib:/usr/local/lib:/usr/local/cuda/lib64:/lib32:/usr/lib32" >> /home/$LINE/.bashrc
-    else
-      echo "export PATH=\$JAVA_HOME/bin:/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:\$ANDROID/eclipse:\$ANDROID/sdk/platform-tools" >> /home/$LINE/.bashrc
-      echo "export LD_LIBRARY_PATH=/lib:/usr/lib:/usr/local/lib:/lib32:/usr/lib32" >> /home/$LINE/.bashrc
     fi
-    echo "export CLASSPATH=\$JAVA_HOME/jre/lib/rt.jar:." >> /home/$LINE/.bashrc
-  fi
 done
 
 # variables de ambiente de root
@@ -125,54 +116,16 @@ else
   echo "export PATH=\$JAVA_HOME/bin:/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:\$ANDROID/eclipse:\$ANDROID/sdk/platform-tools" >> /root/.bashrc
   echo "export LD_LIBRARY_PATH=/lib:/usr/lib:/usr/local/lib:/lib32:/usr/lib32" >> /root/.bashrc
 fi
+
 echo "export CLASSPATH=\$JAVA_HOME/jre/lib/rt.jar:." >> /root/.bashrc
 source /root/.bashrc
 
 rm users
 
-# Desinstalar Java
-if [ $5 -eq 1 ]
-then
-  dpkg -r --force-depends openjdk-7-jre openjdk-7-jre-headless
-  dpkg -r tzdata-java
-  dpkg -r --force-depends java-common default-jre default-jre-headless openjdk-7-jre-headless
-  dpkg -r icedtea-7-jre-jamvm
-  dpkg -P --force-depends openjdk-7-jre-headless java-common
-  dpkg -r --force-depends libservlet3.0-java ca-certificates-java libatk-wrapper-java libatk-wrapper-java-jni libhsqldb1.8.0-java
-  dpkg -P  ca-certificates-java libatk-wrapper-java-jni
-  dpkg -r libreoffice-sdbc-hsqldb
-fi
-
-# Instalar Java
-echo "deb http://ppa.launchpad.net/webupd8team/java/ubuntu trusty main" | tee /etc/apt/sources.list.d/webupd8team-java.list
-echo "deb-src http://ppa.launchpad.net/webupd8team/java/ubuntu trusty main" | tee -a /etc/apt/sources.list.d/webupd8team-java.list
-apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys EEA14886
-apt-get update
-apt-get install -y oracle-java8-installer
-echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | sudo /usr/bin/debconf-set-selections
-apt-get install -y oracle-java8-set-default
-cd
-
-java -version
-javac -version
-
-
-# cerrar servicios
-apt-get install -y nmap
-nmap -sTU localhost
-service avahi-daemon stop
-service cups-browsed stop
-service cups stop
-echo "manual" >> /etc/init/avahi-daemon.override
-echo "manual" >> /etc/init/cups-browsed.override
-echo "manual" >> /etc/init/cups.override
-
 # para OpenGL y CUDA
 apt-get install -y freeglut3
 apt-get install -y freeglut3-dev
 
-# service lightdm stop
-# service lightdm start
 if [ $1 -eq 1 ] # si CUDA
 then
   ##usamos ubuntu ya que no existe uno especifico de debian y ubuntu es lo mas acercado que tenemos.
@@ -180,7 +133,7 @@ then
   dpkg -i cuda-repo-ubuntu1204_5.5-0_amd64.deb
   apt-get update
   apt-cache search cuda
-# pero vuelve a instalar openjdk
+
   apt-get install -y cuda
   rm cuda-repo-ubuntu1204_5.5-0_amd64.deb
 fi
@@ -196,39 +149,6 @@ then
   apt-get install -y texlive-full
   apt-get install texmaker
 fi
-
-# otros paquetes:
-if [ $6 -eq 1 ] # si se quiere netbeans
-then
-  apt-get install -y cmake
-  apt-get install -y gdb
-  apt-get install -y qmake
-  apt-get purge openjdk*
-  add-apt-repository ppa:webupd8team/java
-  apt-get update
-  apt-get install oracle-java8-installer
-  java -version
-
-  wget http://download.netbeans.org/netbeans/8.0.2/final/bundles/netbeans-8.0.2-linux.sh
-
-  chmod +x netbeans-8.0.2-linux.sh
-  sh netbeans-8.0.2-php-linux.sh
-fi
-
-apt-get install -y libc6:i386
-apt-get install -y libstdc++6:i386 libgcc1:i386 zlib1g:i386 libncurses5:i386
-wget http://dl.google.com/android/adt/adt-bundle-linux-x86_64-20140702.zip
-unzip adt-bundle-linux-x86_64-20140702.zip
-
-ls -1 /home > users
-cat users | while read LINE
-do
-  mkdir /home/$LINE/Development
-  mv adt-bundle-linux-x86_64-20140702 /home/$LINE/Development
-  chown -R $LINE.$LINE /home/$LINE/Development
-done
-rm -rf adt-bundle-linux-x86_64-20140702.zip
-rm users
 
 if [ $3 -eq 1 ] # si se quiere STEAM ]
 then
@@ -280,7 +200,6 @@ then
     apt-get install -y nodejs
     gem install -y rails -v 4.2.4
     rails -v
-    add-apt-repository --remove ppa:chris-lea/node.js
     cd
 	
     rm -rf ruby-2.2.3.tar.gz
@@ -309,7 +228,71 @@ then
     dpkg -i wireshark-common_2.0.5.0-1_i386.deb wireshark_wireshark-2.0.5.0-1_i386.deb
 fi
 
+# Desinstalar Java
+if [ $5 -eq 1 ]
+then
+  dpkg -r --force-depends openjdk-7-jre openjdk-7-jre-headless
+  dpkg -r tzdata-java
+  dpkg -r --force-depends java-common default-jre default-jre-headless openjdk-7-jre-headless
+  dpkg -r icedtea-7-jre-jamvm
+  dpkg -P --force-depends openjdk-7-jre-headless java-common
+  dpkg -r --force-depends libservlet3.0-java ca-certificates-java libatk-wrapper-java libatk-wrapper-java-jni libhsqldb1.8.0-java
+  dpkg -P  ca-certificates-java libatk-wrapper-java-jni
+  dpkg -r libreoffice-sdbc-hsqldb
+fi
+
+# Instalar Java
+echo "deb http://ppa.launchpad.net/webupd8team/java/ubuntu trusty main" | tee /etc/apt/sources.list.d/webupd8team-java.list
+echo "deb-src http://ppa.launchpad.net/webupd8team/java/ubuntu trusty main" | tee -a /etc/apt/sources.list.d/webupd8team-java.list
+apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys EEA14886
+apt-get update
+apt-get install -y oracle-java8-installer
+echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | sudo /usr/bin/debconf-set-selections
+apt-get install -y oracle-java8-set-default
+
+java -version
+javac -version
+
+# cerrar servicios
+apt-get install -y nmap
+nmap -sTU localhost
+service avahi-daemon stop
+service cups-browsed stop
+service cups stop
+echo "manual" >> /etc/init/avahi-daemon.override
+echo "manual" >> /etc/init/cups-browsed.override
+echo "manual" >> /etc/init/cups.override
+
+# otros paquetes:
+if [ $6 -eq 1 ] # si se quiere netbeans
+then
+  apt-get install -y cmake
+  apt-get install -y gdb
+  apt-get install -y qmake
+
+  wget http://download.netbeans.org/netbeans/8.0.2/final/bundles/netbeans-8.0.2-linux.sh
+
+  chmod +x netbeans-8.0.2-linux.sh
+  sh netbeans-8.0.2-php-linux.sh
+fi
+
+apt-get install -y libc6:i386
+apt-get install -y libstdc++6:i386 libgcc1:i386 zlib1g:i386 libncurses5:i386
+wget http://dl.google.com/android/adt/adt-bundle-linux-x86_64-20140702.zip
+unzip adt-bundle-linux-x86_64-20140702.zip
+
+ls -1 /home > users
+cat users | while read LINE
+do
+  mkdir /home/$LINE/Development
+  mv adt-bundle-linux-x86_64-20140702 /home/$LINE/Development
+  chown -R $LINE.$LINE /home/$LINE/Development
+done
+rm -rf adt-bundle-linux-x86_64-20140702.zip
+rm users
+
 if [ $7 -eq 1 ]
+then
    ##Instalar spotify
    echo deb http://repository.spotify.com stable non-free | sudo tee /etc/apt/sources.list.d/spotify.list
    apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys D2C19886

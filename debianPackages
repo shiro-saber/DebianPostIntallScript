@@ -33,8 +33,23 @@ apt-get install -y g++
 apt-get install -y k3b
 apt-get install -y xfce4-xkb-plugin
 
+##Instalar kingsoft, office de linux
+wget -O wps-office.deb
+http://kdl.cc.ksosoft.com/wps-community/download/a19/wps-office_9.1.0.4975~a19p1_i386.deb
+dpkg -i wps-office.deb
+apt-get -f install && rm wps-office.deb
+wget -O web-office-fonts.deb
+http://kdl.cc.ksosoft.com/wps-community/download/a15/wps-office-fonts_1.0_all.deb
+dpkg -i web-office-fonts.deb
+
+##A falta de aprobar
+##Desinstalar libre office
+##On Research jaja
+
 ##Instalacion de chrome
 ## https://www.google.com/intl/en/chrome/browser/
+apt-get install -y libappindicator1
+apt-get install -f -y
 apt-get install -y libcurl3
 wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
 dpkg -i google-chrome-stable_current_amd64.deb
@@ -147,7 +162,7 @@ if [ $2 -eq 1 ] # si se quiere LATEX
 then
   #Instalacion de LATEX -- Esta parte dura bastante, se descargan cerca de 2GB
   apt-get install -y texlive-full
-  apt-get install texmaker
+  apt-get install -y texmaker
 fi
 
 if [ $3 -eq 1 ] # si se quiere STEAM ]
@@ -157,11 +172,12 @@ then
   dpkg --add-architecture i386
   aptitude update
   aptitude install -y steam
+  ##Genera problemas con Gnome, como que lo mata
   #if nvidia-detect
   #then
     # aptitude install -y libgl1-nvidia-glx:i386
   #else
-     aptitude install -y libgl1-fglrx-glx:i386
+     #aptitude install -y libgl1-fglrx-glx:i386
   #fi
 fi
 
@@ -211,6 +227,9 @@ then
     apt-get install -y postgresql-common
     apt-get install -y postgresql-9.3 libpq-dev
     		
+    ##instalar vim
+    apt-get install -y vim   
+
     ##instalacion sshd
     apt-get install -y openssh-server    
 
@@ -226,6 +245,11 @@ then
     ##instalacion wireshark
     aptitude install -y wireshark
     dpkg -i wireshark-common_2.0.5.0-1_i386.deb wireshark_wireshark-2.0.5.0-1_i386.deb
+
+    ##Desinstalar gedit, instalar atom
+    apt-get remove -y gedit
+    wget https://atom.io/download/deb
+    dpkg -i deb
 fi
 
 # Desinstalar Java
@@ -271,9 +295,9 @@ then
   apt-get install -y qmake
 
   wget http://download.netbeans.org/netbeans/8.0.2/final/bundles/netbeans-8.0.2-linux.sh
-
+z
   chmod +x netbeans-8.0.2-linux.sh
-  sh netbeans-8.0.2-php-linux.sh
+  sh netbeans-8.0.2-linux.sh
 fi
 
 apt-get install -y libc6:i386
@@ -297,14 +321,18 @@ then
    echo deb http://repository.spotify.com stable non-free | sudo tee /etc/apt/sources.list.d/spotify.list
    apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys D2C19886
    apt-get update
-   apt-get install spotify-client
-
+   apt-get install -y spotify-client
+   wget http://mirrors.ocf.berkeley.edu/tanglu/pool/main/libg/libgcrypt11/libgcrypt11_1.5.4-3_amd64.deb
+   dpkg -i libgcrypt11_1.5.4-3_amd64.deb
+   rm libgcrypt11_1.5.4-3_amd64.deb
+   
    ##Instalar skype
    dpkg --add-architecture i386
    aptitude update
-   aptitude install libc6:i386 libqt4-dbus:i386 libqt4-network:i386 libqt4-xml:i386 libqtcore4:i386 libqtgui4:i386 libqtwebkit4:i386 libstdc++6:i386 libx11-6:i386 libxext6:i386 libxss1:i386 libxv1:i386 libssl1.0.0:i386 libpulse0:i386 libasound2-plugins:i386
+   aptitude install -y libc6:i386 libqt4-dbus:i386 libqt4-network:i386 libqt4-xml:i386 libqtcore4:i386 libqtgui4:i386 libqtwebkit4:i386 libstdc++6:i386 libx11-6:i386 libxext6:i386 libxss1:i386 libxv1:i386 libssl1.0.0:i386 libpulse0:i386 libasound2-plugins:i386
    wget -O skype-install.deb http://www.skype.com/go/getskype-linux-deb
    dpkg -i skype-install.deb
+   rm skype-install.deb
 fi
 
 apt-get autoremove -y 

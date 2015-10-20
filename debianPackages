@@ -17,6 +17,43 @@ fi
 FILE="/tmp/out.$$"
 GREP="/bin/grep"
 
+#Revisar que los parametros sean aceptables
+if [ $1 -ne 0 ] && [ $1 -ne 1 ]
+then
+    echo "Caracter no válido en la opción A"
+    exit 1
+fi
+if [ $2 -ne 0 ] && [ $2 -ne 1]
+then
+    echo "Caracter no válido en la opcion B"
+    exit 1
+fi
+if [ $3 -ne 0 ] && [ $3 -ne 1 ]
+then
+    echo "Caracter no válido en la opción C"
+    exit 1
+fi
+if [ $4 -ne 0 ] && [ $4 -ne 1]
+then 
+    echo "Caracter no válido en la opción D"
+    exit 1
+fi
+if [ $5 -ne 0 ] && [ $5 -ne 1 ]
+then
+    echo "Caracter no válido en la opción E"
+    exit 1
+fi
+if [ $6 -ne 0 ] && [ $6 -ne 1 ] && [ $6 -ne 2 ] && [ $6 -ne 3 ] && [ $6 -ne 4 ] && [ $6 -ne 5 ]
+then
+    echo "Caracter no válido en la opción F"
+    exit 1
+fi
+if [ $7 -ne 0 ] && [ $7 -ne 1 ]
+then 
+    echo "Caracter no válido en la opción G"
+    exit 1
+fi
+
 # Make sure only root can run our script
 if [ "$(id -u)" != "0" ];
 then
@@ -36,6 +73,8 @@ modprobe -r iwlwifi ; modprobe iwlwifi
 apt-get install -y g++
 apt-get install -y k3b
 apt-get install -y xfce4-xkb-plugin
+apt-get install -y cmake
+apt-get install -y cmake-curses-gui
 
 ##Instalar kingsoft, office de linux
 wget -O wps-office.deb
@@ -81,6 +120,13 @@ dpkg -r bluez bluez-cups bluez-alsa
 dpkg -P bluez
 dpkg -r xchat xchat-common xchat-indicator
 dpkg -P xchat
+dpkg -r printer-driver-postscript-hp
+dpkg -r hplip
+dpkg -P hplip
+dpkg -r printer-driver-hpcups
+dpkg -r cups-filters-ippusbxd
+dpkg -r printer-driver-pxljr
+dpkg -r printer-driver-foo2zjs
 
 #Obtener los nombres de los usuarios
 ls -1 /home > users
@@ -127,16 +173,13 @@ then
   rm cuda-repo-ubuntu1204_5.5-0_amd64.deb
 fi
 
-dpkg -l | grep -i cuda
-dpkg -l | grep -i nvidia
-
 nvcc --version
 
 if [ $2 -eq 1 ] # si se quiere LATEX
 then
   #Instalacion de LATEX -- Esta parte dura bastante, se descargan cerca de 2GB
   apt-get install -y texlive-full
-  apt-get install -y texmaker
+  apt-get install -y textmaker
 fi
 
 if [ $3 -eq 1 ] # si se quiere STEAM ]
@@ -211,8 +254,6 @@ then
     make VIMRUNTIMEDIR=/usr/share/vim/vim74
     make install
     vim --version
-    #Instalacion grafica
-    apt-get install -y vim-tiny
     ##instalacion sshd
     apt-get install -y openssh-server
 
@@ -266,6 +307,18 @@ nmap -sTU localhost
 service avahi-daemon stop
 service cups-browsed stop
 service cups stop
+systemctl stop avahi-daemon.service
+systemctl stop avahi-daemon.socket
+systemctl disable avahi-daemon.service
+systemctl disable avahi-daemon.socket
+systemctl stop cups.path
+systemctl stop cups-browsed.service
+systemctl stop cups.service
+systemctl stop cups.socket
+systemctl disable cups.path
+systemctl disable cups-browsed.service
+systemctl disable cups.service
+systemctl disable cups.socket
 echo "manual" >> /etc/init/avahi-daemon.override
 echo "manual" >> /etc/init/cups-browsed.override
 echo "manual" >> /etc/init/cups.override
@@ -273,7 +326,6 @@ echo "manual" >> /etc/init/cups.override
 # otros paquetes:
 if [ $6 -eq 5 ] # si se quiere netbeans
 then
-  apt-get install -y cmake
   apt-get install -y gdb
   apt-get install -y qmake
 

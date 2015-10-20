@@ -82,36 +82,6 @@ dpkg -P bluez
 dpkg -r xchat xchat-common xchat-indicator
 dpkg -P xchat
 
-##checamos los demas paqutes
-dpkg -l | grep -i mail
-dpkg -l | grep -i evolution
-dpkg -l | grep -i ftp
-dpkg -l | grep -i talk
-dpkg -l | grep -i finger
-dpkg -l | grep -i telnet
-dpkg -l | grep -i samba
-dpkg -l | grep -i smb
-dpkg -l | grep -i transmission
-dpkg -l | grep -i torrent
-dpkg -l | grep -i msn
-dpkg -l | grep -i pidgin
-dpkg -l | grep -i pptp
-dpkg -l | grep -i ppp
-dpkg -l | grep -i openconnect
-dpkg -l | grep -i vpn
-dpkg -l | grep -i rsh
-dpkg -l | grep -i rlogin
-dpkg -l | grep -i rtp
-dpkg -l | grep -i rdate
-dpkg -l | grep -i rsync
-dpkg -l | grep -i vino
-dpkg -l | grep -i vinagre
-dpkg -l | grep -i nfs
-dpkg -l | grep -i ypbind
-dpkg -l | grep -i raid
-dpkg -l | grep -i rpc
-dpkg -l | grep -i blue
-
 #Obtener los nombres de los usuarios
 ls -1 /home > users
 
@@ -230,9 +200,19 @@ then
     apt-get install -y postgresql-common
     apt-get install -y postgresql-9.3 libpq-dev
 
-    ##instalar vim
-    apt-get install -y vim
-
+    ##instalar vim, compilado con variables de python para que pueda agregar plugins adicionales
+    apt-get install -y libncurses5-dev libgnome2-dev libgnomeui-dev libgtk2.0-dev libatk1.0-dev libbonoboui2-dev libcairo2-dev libx11-dev libxpm-dev libxt-dev python-dev ruby-dev
+    #por si habia un vim antes
+    apt-get remove -y vim vim-runtime gvim vim-tiny vim-common vim-gui-common
+    cd
+    git clone https://github.com/vim/vim.git
+    cd vim
+    ./configure --with-features=huge --enable-multibyte --enable-rubyinterp --enable-pythoninterp --with-python-config-dir=/usr/lib/python2.7/config --enable-perlinterp --enable-luainterp --enable-gui=gtk2 --enable-cscope --prefix=/usr
+    make VIMRUNTIMEDIR=/usr/share/vim/vim74
+    make install
+    vim --version
+    #Instalacion grafica
+    apt-get install -y vim-tiny
     ##instalacion sshd
     apt-get install -y openssh-server
 
@@ -400,3 +380,11 @@ echo "     sudo -u postgres psql"
 echo "     dentro de la terminal postgres:"
 echo "     postgres=# \password NombreDeUsuario"
 echo "     Y para salir solo se utiliza \q"
+echo " "
+echo "NOTA: para crear el archivo vimrc (que sirve para configurar vim de manera amigable) seguir los pasos: "
+echo "      cd ~/"
+echo "      vim .vimrc"
+echo "Esto creara una carpeta llamada vim dentro de ~/"
+echo "Dentro de la liga https://github.com/shiro-saber/Vim"
+echo "Se encuentra un ejemplo de un archivo vimrc, es importante que si se utiliza, se baje tambien la carpeta de colors"
+echo "Ya que aqui se encuentra el color scheme que se utiliza"

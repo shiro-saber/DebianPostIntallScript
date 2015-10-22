@@ -422,6 +422,11 @@ then
    rm skype-install.deb
 fi
 
+##Para configurar el brillo de la pantalla
+echo 'GRUB_CMDLINE_LINUX_DEFAULT="quiet splash acpi_osi=Linux acpi_blacklight=vendor"' > /etc/default/grub
+echo 'GRUB_CMDLINE_LINUX="acpi_backlight=vendor"' > /etc/default/grub
+
+update-grub
 apt-get autoremove -y
 apt-get clean
 
@@ -440,3 +445,4 @@ echo "Esto creara una carpeta llamada vim dentro de ~/"
 echo "Dentro de la liga https://github.com/shiro-saber/Vim"
 echo "Se encuentra un ejemplo de un archivo vimrc, es importante que si se utiliza, se baje tambien la carpeta de colors"
 echo "Ya que aqui se encuentra el color scheme que se utiliza"
+echo "Para que la configuracion del brillo de la computadora, se requiere un reinicio"

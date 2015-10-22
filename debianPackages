@@ -23,7 +23,7 @@ then
     echo "Caracter no válido en la opción A"
     exit 1
 fi
-if [ $2 -ne 0 ] && [ $2 -ne 1]
+if [ $2 -ne 0 ] && [ $2 -ne 1 ]
 then
     echo "Caracter no válido en la opcion B"
     exit 1
@@ -33,7 +33,7 @@ then
     echo "Caracter no válido en la opción C"
     exit 1
 fi
-if [ $4 -ne 0 ] && [ $4 -ne 1]
+if [ $4 -ne 0 ] && [ $4 -ne 1 ]
 then 
     echo "Caracter no válido en la opción D"
     exit 1

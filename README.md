@@ -28,7 +28,7 @@ El script por default instalará los siguientes paquetes:
 * *Java y Javac*, directo de la página de oracle
 * *nmap*, utilizado para cerrar los servicios inseguros
 * *Adt Bundle Android*
-* Ademas de configurar las variables de ambiente y configurar el brillo de la pantalla
+* Ademas de configurar las variables de ambiente y configurar el brillo de la pantalla **"Aún se esta trabajando en esto"**
 
 El script también removerá los paquetes inseguros:
 * *ftp*

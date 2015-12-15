@@ -77,7 +77,11 @@ apt-get install -y cmake
 apt-get install -y cmake-curses-gui
 
 ##Instalar kingsoft, office de linux
-echo "Instalando LibreOffice"
+echo "Instalando Kingsoft, desinstalando LibreOffice"
+apt-get remove --purge -y libreoffice*
+apt-get clean
+apt-get -y autoremove
+
 wget -O wps-office.deb
 http://kdl.cc.ksosoft.com/wps-community/download/a19/wps-office_9.1.0.4975~a19p1_i386.deb
 dpkg -i wps-office.deb
@@ -85,10 +89,6 @@ apt-get -f install && rm wps-office.deb
 wget -O web-office-fonts.deb
 http://kdl.cc.ksosoft.com/wps-community/download/a15/wps-office-fonts_1.0_all.deb
 dpkg -i web-office-fonts.deb
-
-##A falta de aprobar
-##Desinstalar libre office
-##On Research jaja
 
 ##Instalacion de chrome
 ## https://www.google.com/intl/en/chrome/browser/

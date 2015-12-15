@@ -6,10 +6,9 @@ then
   echo "       A es 1 si se quiere instalar CUDA y además se tiene una tarjeta de video NVIDIA o 0 si no"
   echo "       B es 1 si se quire instalar LATEX para escribir papers o 0 si no"
   echo "       C es 1 si se quiere instalar STEAM para juegos o 0 si no"
-  echo "       D es 1 si se quiere el programmer pack (ruby, octave, R, git) 0 si no"
+  echo "       D es 1 si se quiere el programmer pack (ruby, octave, R, git, mysql, ssh) 0 si no"
   echo "       E es 1 si no se instaló Netbeans ni CUDA y se quiere quitar el otro java de linux (ya que si se instalará el Java de Oracle) o 0 si no se quiere quitar"
-  echo "       F es 1 si se quiere instalar Netbeans con Java EE, 2 si se quiere con Java SE, 3 si
-  se quiere con C/C++, 4 si se quiere con HTML5 & PHP, 5 si se quiere el paquete completo o 0 si no"
+  echo "       F es 1 si se quiere instalar Netbeans con Java EE, 2 si se quiere con Java SE, 3 si se quiere con C/C++, 4 si se quiere con HTML5 & PHP, 5 si se quiere el paquete completo o 0 si no"
   echo "       G es 1 si se quiere instalar Spotify y Skype 0 si no"
   exit 1
 fi
@@ -47,7 +46,7 @@ if [ $6 -ne 0 ] && [ $6 -ne 1 ] && [ $6 -ne 2 ] && [ $6 -ne 3 ] && [ $6 -ne 4 ] 
 then
     echo "Caracter no válido en la opción F"
     exit 1
-fi
+  fi
 if [ $7 -ne 0 ] && [ $7 -ne 1 ]
 then
     echo "Caracter no válido en la opción G"
@@ -57,7 +56,7 @@ fi
 # Make sure only root can run our script
 if [ "$(id -u)" != "0" ];
 then
-   echo "¡NECESITAS SER ROOT!"
+   echo "¡NECESITAS SER ROOT! No sirve ejecutarlo como sudo"
    exit 1
 fi
 
@@ -70,6 +69,7 @@ apt-get install firmware-iwlwifi
 modprobe -r iwlwifi ; modprobe iwlwifi
 
 ##instalas los paquetes que faltan
+echo "Instalando paquetes útiles"
 apt-get install -y g++
 apt-get install -y k3b
 apt-get install -y xfce4-xkb-plugin
@@ -77,6 +77,7 @@ apt-get install -y cmake
 apt-get install -y cmake-curses-gui
 
 ##Instalar kingsoft, office de linux
+echo "Instalando LibreOffice"
 wget -O wps-office.deb
 http://kdl.cc.ksosoft.com/wps-community/download/a19/wps-office_9.1.0.4975~a19p1_i386.deb
 dpkg -i wps-office.deb
@@ -91,6 +92,7 @@ dpkg -i web-office-fonts.deb
 
 ##Instalacion de chrome
 ## https://www.google.com/intl/en/chrome/browser/
+echo "Instalando Chrome"
 apt-get install -y libappindicator1
 apt-get install -f -y
 apt-get install -y libcurl3
@@ -98,6 +100,7 @@ wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
 dpkg -i google-chrome-stable_current_amd64.deb
 
 ##Quitar los parquetes que no son seguros.
+echo "Removiendo paquetes inseguros"
 apt-get remove -y ftp
 dpkg -r telnet
 dpkg -P telnet
@@ -254,6 +257,7 @@ then
     make VIMRUNTIMEDIR=/usr/share/vim/vim74
     make install
     vim --version
+
     ##instalacion sshd
     apt-get install -y openssh-server
 
@@ -427,11 +431,12 @@ fi
 #echo 'GRUB_CMDLINE_LINUX_DEFAULT="quiet splash acpi_osi=Linux acpi_blacklight=vendor"' > /etc/default/grub
 #echo 'GRUB_CMDLINE_LINUX="acpi_backlight=vendor"' > /etc/default/grub
 
-update-grub
+##update-grub
 apt-get autoremove -y
 apt-get clean
+clear
 
-echo "¡IMPORTANTE!"
+echo "-----------------¡IMPORTANTE!----------------------"
 echo "Para configurar mysql se necesitan correr los siguientes pasos en root:"
 echo "     sudo -u postgres createuser NombreDeUsuario -s"
 echo "     sudo -u postgres psql"
@@ -446,4 +451,4 @@ echo "Esto creara una carpeta llamada vim dentro de ~/"
 echo "Dentro de la liga https://github.com/shiro-saber/Vim"
 echo "Se encuentra un ejemplo de un archivo vimrc, es importante que si se utiliza, se baje tambien la carpeta de colors"
 echo "Ya que aqui se encuentra el color scheme que se utiliza"
-echo "Para que la configuracion del brillo de la computadora, se requiere un reinicio"
+## echo "Para que la configuracion del brillo de la computadora, se requiere un reinicio"

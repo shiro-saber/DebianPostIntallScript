@@ -64,28 +64,28 @@ cd
 echo "listo para instalar"
 
 echo "deb http://http.debian.net/debian/ jessie main contrib non-free" >> /etc/apt/sources.list
-apt-get update
-apt-get install firmware-iwlwifi
+apt update
+apt install firmware-iwlwifi
 modprobe -r iwlwifi ; modprobe iwlwifi
 
 ##instalas los paquetes que faltan
 echo "Instalando paquetes útiles"
-apt-get install -y g++
-apt-get install -y k3b
-apt-get install -y xfce4-xkb-plugin
-apt-get install -y cmake
-apt-get install -y cmake-curses-gui
+apt install -y g++
+apt install -y k3b
+apt install -y xfce4-xkb-plugin
+apt install -y cmake
+apt install -y cmake-curses-gui
 
 ##Instalar kingsoft, office de linux
 echo "Instalando Kingsoft, desinstalando LibreOffice"
-apt-get remove --purge -y libreoffice*
-apt-get clean
-apt-get -y autoremove
+apt remove --purge -y libreoffice*
+apt clean
+apt -y autoremove
 
 wget -O wps-office.deb
 http://kdl.cc.ksosoft.com/wps-community/download/a19/wps-office_9.1.0.4975~a19p1_i386.deb
 dpkg -i wps-office.deb
-apt-get -f install && rm wps-office.deb
+apt -f install && rm wps-office.deb
 wget -O web-office-fonts.deb
 http://kdl.cc.ksosoft.com/wps-community/download/a15/wps-office-fonts_1.0_all.deb
 dpkg -i web-office-fonts.deb
@@ -93,41 +93,28 @@ dpkg -i web-office-fonts.deb
 ##Instalacion de chrome
 ## https://www.google.com/intl/en/chrome/browser/
 echo "Instalando Chrome"
-apt-get install -y libappindicator1
-apt-get install -f -y
-apt-get install -y libcurl3
+apt install -y libappindicator1
+apt install -f -y
+apt install -y libcurl3
 wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
 dpkg -i google-chrome-stable_current_amd64.deb
 
 ##Quitar los parquetes que no son seguros.
 echo "Removiendo paquetes inseguros"
-apt-get remove -y ftp
+apt remove -y ftp
 dpkg -r telnet
 dpkg -P telnet
-dpkg -r samba-common smbclient samba-common-bin
-dpkg -P samba-common
-dpkg -r transmission-gtk
-dpkg -r transmission-common
-dpkg -P transmission-gtk
 dpkg -r pptp-linux network-manager-pptp network-manager-pptp-gnome
 dpkg -P pptp-linux network-manager-pptp
-dpkg -r ppp pppoeconf pppconfig
-dpkg -P ppp pppoeconf pppconfig
+dpkg -r ppp 
+dpkg -P ppp 
 dpkg -r rsync
 dpkg -P rsync
-dpkg -r vinagre
-dpkg -P vinagre
-dpkg -r blueman
-dpkg -P blueman
-dpkg -r bluez bluez-cups bluez-alsa
-dpkg -P bluez
-dpkg -r xchat xchat-common xchat-indicator
-dpkg -P xchat
+dpkg -r bluez-cups 
 dpkg -r printer-driver-postscript-hp
 dpkg -r hplip
 dpkg -P hplip
 dpkg -r printer-driver-hpcups
-dpkg -r cups-filters-ippusbxd
 dpkg -r printer-driver-pxljr
 dpkg -r printer-driver-foo2zjs
 
@@ -161,19 +148,20 @@ source /root/.bashrc
 rm users
 
 # para OpenGL y CUDA
-apt-get install -y freeglut3
-apt-get install -y freeglut3-dev
+apt install -y freeglut3
+apt install -y freeglut3-dev
 
 if [ $1 -eq 1 ] # si CUDA
 then
+  echo "Chingadera que nunca sirve"
   ##usamos ubuntu ya que no existe uno especifico de debian y ubuntu es lo mas acercado que tenemos.
-  wget http://developer.download.nvidia.com/compute/cuda/repos/ubuntu1204/x86_64/cuda-repo-ubuntu1204_5.5-0_amd64.deb
-  dpkg -i cuda-repo-ubuntu1204_5.5-0_amd64.deb
-  apt-get update
-  apt-cache search cuda
+  #wget http://developer.download.nvidia.com/compute/cuda/repos/ubuntu1204/x86_64/cuda-repo-ubuntu1204_5.5-0_amd64.deb
+  #dpkg -i cuda-repo-ubuntu1204_5.5-0_amd64.deb
+  #apt update
+  #apt-cache search cuda
 
-  apt-get install -y cuda
-  rm cuda-repo-ubuntu1204_5.5-0_amd64.deb
+  #apt install -y cuda
+  #rm cuda-repo-ubuntu1204_5.5-0_amd64.deb
 fi
 
 nvcc --version
@@ -181,13 +169,14 @@ nvcc --version
 if [ $2 -eq 1 ] # si se quiere LATEX
 then
   #Instalacion de LATEX -- Esta parte dura bastante, se descargan cerca de 2GB
-  apt-get install -y texlive-full
-  apt-get install -y textmaker
+  apt install -y texlive-full
+  apt install -y texmaker
 fi
 
 if [ $3 -eq 1 ] # si se quiere STEAM ]
 then
-  apt-get install -y curl
+  apt install -y curl
+  apt install -y aptitude
   dpkg --add-architecture i386
   aptitude update
   aptitude install -y steam
@@ -202,80 +191,54 @@ fi
 
 if [ $4 -eq 1 ] #Si instalamos ruby, python y R
 then
-    apt-get install -y git
-    apt-get install -y git-core
-    apt-get install -y curl
-    apt-get install -y zlib1g-dev
-    apt-get install -y build-essential
-    apt-get install -y libssl-dev
-    apt-get install -y libreadline-dev
-    apt-get install -y libyaml-dev
-    apt-get install -y libsqlite3-dev
-    apt-get install -y sqlite3
-    apt-get install -y libxml2-dev
-    apt-get install -y libxslt1-dev
-    apt-get install -y libcurl4-openssl-dev
-    apt-get install -y python-software-properties libffi-dev
-    ##Instalacion de ruby
-    cd
-    wget http://ftp.ruby-lang.org/pub/ruby/2.2/ruby-2.2.3.tar.gz
-    tar -xzvf ruby-2.2.3.tar.gz
-    cd ruby-2.2.3/
-    ./configure
-    make
-    make install
-    ruby -v
+    apt install -y git
+    apt install -y git-core
+    apt install -y build-essential
+    apt install -y libssl-dev
+    apt install -y libreadline-dev
+    apt install -y libyaml-dev
+    apt install -y libsqlite3-dev
+    apt install -y sqlite3
+    apt install -y libxml2-dev
+    apt install -y libxslt1-dev
+    apt install -y libcurl4-openssl-dev
+    apt install -y python-software-properties libffi-dev
+    
+    ##Instalacion de RVM
+    gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
+    \curl -sSL https://get.rvm.io | bash -s stable --ruby    
+    \curl -sSL https://get.rvm.io | bash -s stable --rails
 
-    echo "gem: --no-ri --no-rdoc" > ~/.gemrc
-    gem install bundler
-
-    ##Instalacion de rails
-    add-apt-repository ppa:chris-lea/node.js
-    apt-get update
-    apt-get install -y nodejs cscope
-    gem install -y rails -v 4.2.4
-    rails -v
-    cd
-
-    rm -rf ruby-2.2.3.tar.gz
-
-    ## instalacion mysql
-    sh -c "echo 'deb http://apt.postgresql.org/pub/repos/apt/ precise-pgdg main' > /etc/apt/sources.list.d/pgdg.list"
+    #Instalacion de NVM
+    curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.0/install.sh | bash
+    source ~/.bashrc
+    nvm install v6.9.4
+    
+    ## instalacion postgres
+    sudo sh -c "echo 'deb http://apt.postgresql.org/pub/repos/apt/ precise-pgdg main' > /etc/apt/sources.list.d/pgdg.list"
     wget --quiet -O - http://apt.postgresql.org/pub/repos/apt/ACCC4CF8.asc | sudo apt-key add -
-    apt-get update
-    apt-get install -y postgresql-common
-    apt-get install -y postgresql-9.3 libpq-dev
-
-    ##instalar vim, compilado con variables de python para que pueda agregar plugins adicionales
-    ./configure --with-features=huge --with-gnome --enable-perlinterp=dynamic --enable-multibyte --enable-rubyinterp=dynamic --enable-pythoninterp=yes --enable-python3interp=dynamic --with-python-config-dir=/usr/lib/python2.7/config --with-python-config-dir=/usr/lib/python3.4/config --enable-perlinterp --enable-luainterp --enable-gui=gtk2 --enable-cscope
-    #por si habia un vim antes
-    apt-get remove -y vim vim-runtime gvim vim-tiny vim-common vim-gui-common
-    cd
-    git clone https://github.com/vim/vim.git
-    cd vim
-    ./configure --with-features=huge --enable-multibyte --enable-rubyinterp --enable-pythoninterp=dynamic --enable-python3interp=dynamic --with-python-config-dir=/usr/lib/python2.7/config --with-python-config-dir=/usr/lib/python3.4/config --enable-perlinterp --enable-luainterp --enable-gui=gtk2 --enable-cscope --prefix=/usr
-    make VIMRUNTIMEDIR=/usr/share/vim/vim74
-    make install
-    vim --version
+    sudo apt update
+    sudo apt install postgresql-common
+    sudo apt install postgresql-9.6 libpq-dev
 
     ##instalacion sshd
-    apt-get install -y openssh-server
+    apt install -y openssh-server
 
     ##Instalacion de R
-    apt-get install -y r-base
+    apt install -y r-base
 
     ##instalacion de gnuplot
-    apt-get install -y gnuplot
+    apt install -y gnuplot
 
     ##instalacion de octave
-    apt-get install -y octave
+    apt install -y octave
 
     ##instalacion wireshark
     aptitude install -y wireshark
     dpkg -i wireshark-common_2.0.5.0-1_i386.deb wireshark_wireshark-2.0.5.0-1_i386.deb
 
     ##Desinstalar gedit, instalar atom
-    apt-get remove -y gedit
+    apt remove -y gedit
     wget https://atom.io/download/deb
     dpkg -i deb
 fi
@@ -411,8 +374,8 @@ then
    ##Instalar spotify
    echo deb http://repository.spotify.com stable non-free | sudo tee /etc/apt/sources.list.d/spotify.list
    apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys D2C19886
-   apt-get update
-   apt-get install -y spotify-client
+   apt update
+   apt install -y spotify-client
    wget http://mirrors.ocf.berkeley.edu/tanglu/pool/main/libg/libgcrypt11/libgcrypt11_1.5.4-3_amd64.deb
    dpkg -i libgcrypt11_1.5.4-3_amd64.deb
    rm libgcrypt11_1.5.4-3_amd64.deb
@@ -432,8 +395,8 @@ fi
 #echo 'GRUB_CMDLINE_LINUX="acpi_backlight=vendor"' > /etc/default/grub
 
 ##update-grub
-apt-get autoremove -y
-apt-get clean
+apt autoremove -y
+apt clean
 clear
 
 echo "-----------------¡IMPORTANTE!----------------------"
